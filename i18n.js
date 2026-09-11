@@ -13,6 +13,10 @@
   var DICT = window.GPTUNER_I18N || {};
 
   function apply(lang) {
+    // Enforce the allowlist HERE too, not just in currentLang(): apply() must never trust its
+    // caller and fall through to an unvalidated value (fail-open). Anything not in LANGS clamps
+    // to the safe default instead of being written into the DOM or used as a dictionary key.
+    if (!isAllowedLang(lang)) lang = "es";
     document.documentElement.lang = lang;
     // Legal pages only exist in Spanish and English today; any language other than Spanish falls
     // back to the English page (a more likely-understood second language for most visitors) rather
@@ -30,14 +34,15 @@
     });
   }
 
+  function isAllowedLang(code) { return LANGS.some(function (l) { return l.code === code; }); }
+
   function currentLang() {
     try {
       var saved = localStorage.getItem("gptuner_lang");
-      if (saved && DICT[saved] !== undefined) return saved;
-      if (saved === "es") return "es";
+      if (isAllowedLang(saved)) return saved;
     } catch (e) {}
     var nav = (navigator.language || "es").slice(0, 2);
-    return LANGS.some(function (l) { return l.code === nav; }) ? nav : "es";
+    return isAllowedLang(nav) ? nav : "es";
   }
 
   var SVG_NS = "http://www.w3.org/2000/svg", XLINK_NS = "http://www.w3.org/1999/xlink";
