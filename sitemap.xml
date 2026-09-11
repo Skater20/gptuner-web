@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://gptuner.app/</loc></url>
-  <url><loc>https://gptuner.app/privacidad.html</loc></url>
-  <url><loc>https://gptuner.app/terminos.html</loc></url>
-  <url><loc>https://gptuner.app/soporte.html</loc></url>
-  <url><loc>https://gptuner.app/eliminar-cuenta.html</loc></url>
+  <url><loc>https://gptuner.app/privacy.html</loc></url>
+  <url><loc>https://gptuner.app/terms.html</loc></url>
+  <url><loc>https://gptuner.app/support.html</loc></url>
+  <url><loc>https://gptuner.app/delete-account.html</loc></url>
 </urlset>
