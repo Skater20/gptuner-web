@@ -116,14 +116,22 @@
       }, 1500);
     }
 
+    // Same allowlist i18n.js enforces before it ever sets <html lang>. Re-checked here too — this
+    // file must not assume the attribute was validated upstream and index an object with it as-is
+    // (that's how a stray "__proto__"/"constructor" lang value would resolve to a prototype object
+    // instead of undefined, however harmless the payload actually is in this read-only lookup).
+    var ALLOWED_LANGS = ["es", "en", "fr", "de", "it", "pt"];
+
     function statusText(key) {
       // Spanish is the page's own default copy (not in the override dictionary, same rule as
       // i18n.js), so the fallback here must be Spanish too — not English — or picking Spanish in
       // the switcher would leave this one widget stuck in English.
       var lang = document.documentElement.lang;
-      var table = (lang !== "es" && window.GPTUNER_I18N && window.GPTUNER_I18N[lang]) || null;
+      var allowed = ALLOWED_LANGS.indexOf(lang) !== -1;
+      var table = (allowed && lang !== "es" && window.GPTUNER_I18N &&
+        Object.prototype.hasOwnProperty.call(window.GPTUNER_I18N, lang) && window.GPTUNER_I18N[lang]) || null;
       var es = { listen: "Escuchando…", ask: "¿Más alta o más baja?", correct: "¡Correcto!", wrong: "Casi." };
-      return (table && table["ear.status." + key]) || es[key];
+      return (table && Object.prototype.hasOwnProperty.call(table, "ear.status." + key) && table["ear.status." + key]) || es[key];
     }
 
     function answer(guessHigher) {
