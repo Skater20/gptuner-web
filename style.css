@@ -1,0 +1,119 @@
+/* GPTuner — hoja de estilos compartida. Misma identidad visual que la app: fondo oscuro,
+   verde/teal como acentos, tarjetas redondeadas con degradado sutil. */
+:root{
+  --bg:#091411; --bg-top:#0e2019; --card:#142620; --card-a:#17281f; --card-b:#10201a;
+  --green:#b5e6b8; --teal:#56b7a6; --muted:#94afa3; --line:#30483e; --gold:#e8c766; --coral:#ff6f7a;
+  --ink:#f2f8f4;
+  --radius:20px; --radius-s:12px;
+  --maxw:1080px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:radial-gradient(120% 70% at 50% -10%, var(--bg-top), var(--bg) 60%);
+  color:var(--ink); font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  line-height:1.55; min-height:100vh;
+}
+img{max-width:100%; display:block}
+a{color:inherit}
+.wrap{max-width:var(--maxw); margin:0 auto; padding:0 24px}
+
+/* ---- Header ---- */
+header.site{position:sticky; top:0; z-index:20; backdrop-filter:blur(10px); background:rgba(9,20,17,.75); border-bottom:1px solid rgba(48,72,62,.5)}
+.nav{display:flex; align-items:center; justify-content:space-between; padding:14px 0}
+.brand{display:flex; align-items:center; gap:10px; font-weight:700; font-size:18px; text-decoration:none}
+.brand img{width:32px; height:32px; border-radius:8px}
+.navlinks{display:flex; gap:26px; font-size:14px; color:var(--muted)}
+.navlinks a{text-decoration:none; transition:color .15s}
+.navlinks a:hover{color:var(--ink)}
+.cta-mini{background:var(--green); color:var(--bg); padding:9px 18px; border-radius:999px; font-weight:700; font-size:13px; text-decoration:none}
+
+/* ---- Hero ---- */
+.hero{padding:88px 0 60px; text-align:center}
+.eyebrow{display:inline-flex; align-items:center; gap:8px; background:rgba(181,230,184,.12); color:var(--green);
+  border:1px solid rgba(181,230,184,.3); padding:7px 16px; border-radius:999px; font-size:12.5px; font-weight:600; letter-spacing:.3px}
+.hero h1{font-size:clamp(34px,5.5vw,58px); font-weight:800; margin:22px 0 16px; line-height:1.08; text-wrap:balance}
+.hero h1 span{background:linear-gradient(90deg,var(--green),var(--teal)); -webkit-background-clip:text; background-clip:text; color:transparent}
+.hero p.lead{max-width:640px; margin:0 auto 34px; color:var(--muted); font-size:17px}
+.hero-actions{display:flex; gap:14px; justify-content:center; flex-wrap:wrap}
+.btn{display:inline-flex; align-items:center; gap:8px; padding:14px 26px; border-radius:14px; font-weight:700; font-size:15px; text-decoration:none; border:1px solid transparent; cursor:pointer}
+.btn-primary{background:var(--green); color:var(--bg)}
+.btn-primary:hover{filter:brightness(1.06)}
+.btn-ghost{background:transparent; color:var(--ink); border-color:var(--line)}
+.btn-ghost:hover{border-color:var(--green)}
+.store-pills{display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:22px}
+.store-pill{display:flex; align-items:center; gap:8px; border:1px solid var(--line); color:var(--muted); padding:9px 16px; border-radius:12px; font-size:13px}
+
+/* ---- Ilustración del "estudio" (mock hecho en CSS/SVG, no captura real) ---- */
+.mock{max-width:420px; margin:56px auto 0; background:linear-gradient(135deg,var(--card-a),var(--card-b));
+  border:1px solid rgba(48,72,62,.6); border-radius:28px; padding:28px; box-shadow:0 30px 70px rgba(0,0,0,.45), 0 0 0 1px rgba(255,255,255,.02) inset}
+.mock .row{display:flex; align-items:center; gap:10px; margin-bottom:18px}
+.mock .dot{width:38px; height:38px; border-radius:50%; background:rgba(86,183,166,.18); display:flex; align-items:center; justify-content:center; font-size:18px}
+.mock .note{font-size:56px; font-weight:800; color:var(--green); text-shadow:0 0 24px rgba(181,230,184,.5)}
+.mock .hz{color:var(--muted); font-size:13px; margin-top:-6px}
+.mock .meter{height:6px; border-radius:6px; background:var(--line); margin:18px 0; position:relative; overflow:hidden}
+.mock .meter i{position:absolute; inset:0; width:46%; margin:0 auto; left:27%; background:var(--green); border-radius:6px}
+.mock .pill{display:inline-block; background:rgba(181,230,184,.14); color:var(--green); padding:6px 14px; border-radius:999px; font-size:13px; font-weight:700}
+.mock .bpm{display:flex; align-items:baseline; justify-content:center; gap:8px; margin-top:22px; padding-top:18px; border-top:1px solid var(--line)}
+.mock .bpm b{font-size:30px}
+.mock .bpm span{color:var(--muted); font-size:12px; letter-spacing:1.5px}
+
+/* ---- Secciones ---- */
+section{padding:70px 0}
+.section-head{text-align:center; max-width:640px; margin:0 auto 46px}
+.section-head .eyebrow{margin-bottom:16px}
+.section-head h2{font-size:clamp(26px,4vw,38px); font-weight:800; margin:0 0 12px; text-wrap:balance}
+.section-head p{color:var(--muted); font-size:16px; margin:0}
+
+.grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:18px}
+.card{background:linear-gradient(135deg,var(--card-a),var(--card-b)); border:1px solid rgba(48,72,62,.55);
+  border-radius:var(--radius); padding:26px; box-shadow:0 12px 30px rgba(0,0,0,.2)}
+.card .ic{width:46px; height:46px; border-radius:13px; display:flex; align-items:center; justify-content:center; font-size:22px; margin-bottom:16px}
+.card h3{margin:0 0 8px; font-size:17px; font-weight:700}
+.card p{margin:0; color:var(--muted); font-size:14px}
+.ic-green{background:rgba(181,230,184,.16); color:var(--green)}
+.ic-teal{background:rgba(86,183,166,.18); color:var(--teal)}
+.ic-gold{background:rgba(232,199,102,.16); color:var(--gold)}
+.ic-coral{background:rgba(255,111,122,.16); color:var(--coral)}
+
+.badge-soon{display:inline-block; font-size:10.5px; font-weight:700; letter-spacing:.5px; color:var(--teal);
+  background:rgba(86,183,166,.14); padding:3px 9px; border-radius:999px; margin-left:8px; vertical-align:middle}
+
+.path{display:flex; flex-direction:column; align-items:center; gap:14px; max-width:420px; margin:0 auto}
+.path .node{width:56px; height:56px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:700; border:2px solid var(--line); background:var(--card)}
+.path .node.on{border-color:var(--green); color:var(--green); background:rgba(181,230,184,.12); box-shadow:0 0 20px rgba(181,230,184,.3)}
+.path .line{width:2px; height:20px; background:var(--line)}
+.path .lvl{display:flex; align-items:center; gap:14px; width:100%}
+.path .lvl .label{flex:1; font-size:14px; color:var(--muted)}
+.path .lvl.on .label{color:var(--ink); font-weight:600}
+
+.cta-band{text-align:center; background:linear-gradient(135deg,var(--card-a),var(--card-b)); border:1px solid rgba(48,72,62,.55);
+  border-radius:28px; padding:56px 32px; margin:0 24px}
+.cta-band h2{font-size:clamp(24px,3.6vw,34px); margin:0 0 12px}
+.cta-band p{color:var(--muted); max-width:520px; margin:0 auto 26px}
+
+footer.site{border-top:1px solid rgba(48,72,62,.5); padding:44px 0 30px; margin-top:40px}
+.footer-grid{display:flex; flex-wrap:wrap; gap:30px; justify-content:space-between; align-items:flex-start}
+.footer-brand{display:flex; align-items:center; gap:10px; font-weight:700}
+.footer-brand img{width:26px; height:26px; border-radius:6px}
+.footer-links{display:flex; gap:24px; flex-wrap:wrap; font-size:13.5px; color:var(--muted)}
+.footer-links a{text-decoration:none}
+.footer-links a:hover{color:var(--ink)}
+.copyright{color:var(--muted); font-size:12.5px; margin-top:26px; text-align:center}
+
+/* ---- Páginas legales ---- */
+.legal{max-width:760px; margin:0 auto; padding:70px 24px 60px}
+.legal h1{font-size:clamp(26px,4vw,36px); margin:0 0 6px}
+.legal .updated{color:var(--muted); font-size:13px; margin-bottom:36px}
+.legal section{padding:0; margin-bottom:26px; background:var(--card); border:1px solid rgba(48,72,62,.5); border-radius:16px; padding:22px 24px}
+.legal h2{font-size:16px; margin:0 0 10px}
+.legal p, .legal li{color:var(--muted); font-size:14.5px}
+.legal ul{padding-left:20px; margin:8px 0}
+.legal a.email{color:var(--green); text-decoration:none; font-weight:600}
+.back-link{display:inline-flex; align-items:center; gap:6px; color:var(--muted); text-decoration:none; font-size:14px; margin-bottom:30px}
+.back-link:hover{color:var(--ink)}
+
+@media (max-width:640px){
+  .navlinks{display:none}
+  .footer-grid{flex-direction:column}
+}
