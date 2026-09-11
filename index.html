@@ -1,69 +1,97 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>GPTuner — Tuner, Metronome & Music Training</title>
-<meta name="description" content="GPTuner: a precision tuner, metronome and gamified music training app for 30+ instruments. Coming soon to iOS and Android.">
+<title>GPTuner — Afinador, metrónomo y entrenamiento musical</title>
+<meta name="description" content="GPTuner: afinador de precisión, metrónomo y entrenamiento musical gamificado para más de 30 instrumentos. Próximamente en iOS y Android.">
 <link rel="icon" href="/assets/gptuner_mark.png">
-<meta property="og:title" content="GPTuner — Tuner, Metronome & Music Training">
-<meta property="og:description" content="Tune with precision, keep the tempo, and train your ear and rhythm with GPTuner.">
+<meta property="og:title" content="GPTuner — Afinador, metrónomo y entrenamiento musical">
+<meta property="og:description" content="Afina con precisión, marca el tempo y entrena tu oído y tu ritmo con GPTuner.">
 <meta property="og:image" content="/assets/gptuner_logo.png">
 <meta property="og:type" content="website">
 <link rel="stylesheet" href="/style.css">
 </head>
 <body>
 
+<!-- Sprite de iconos de línea dibujados para esta web (sin librerías ni emoji). -->
+<svg class="sprite-hidden" aria-hidden="true">
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.4"/><circle cx="12" cy="12" r="4.2"/><circle cx="12" cy="12" r="0.6" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-metronome" viewBox="0 0 24 24"><path d="M8 20h8L14 5.5a1 1 0 0 0-2 0Z"/><path d="M11.3 8.5 15 17"/><circle cx="15" cy="17" r="1" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-guide" viewBox="0 0 24 24"><path d="M9 17V5.6l9-1.8v10.7"/><circle cx="6.5" cy="17" r="2.5"/><circle cx="15.5" cy="14.5" r="2.5"/></symbol>
+  <symbol id="i-mute" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9Z"/><path d="M16.5 8.5l4 7M20.5 8.5l-4 7"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.4"/><path d="M12 7.5V12l3.2 2"/></symbol>
+  <symbol id="i-ear" viewBox="0 0 24 24"><path d="M9 18c-2.8-1-4.5-3.4-4.5-6.6C4.5 6.9 8 4 12 4s7 2.9 7 6.8c0 2.6-1.7 4-3.4 4.9-1.1.6-1.6 1-1.6 2.3v.5a2.4 2.4 0 0 1-4.8 0"/></symbol>
+  <symbol id="i-scale" viewBox="0 0 24 24"><path d="M4 16V9M8.5 18V6M13 15.5v-8M17.5 19V4"/></symbol>
+  <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3.5" width="6" height="11" rx="3"/><path d="M6 12a6 6 0 0 0 12 0M12 18v3"/></symbol>
+  <symbol id="i-rec" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.4"/><circle cx="12" cy="12" r="3.4" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24"><path d="M4 6.5a1 1 0 0 1 1-1h4.4l1.8 2H19a1 1 0 0 1 1 1V17a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1Z"/></symbol>
+  <symbol id="i-brass" viewBox="0 0 24 24"><path d="M4 8h9M4 8v2.2h6L20 16v-4l-7-4"/></symbol>
+  <symbol id="i-wood" viewBox="0 0 24 24"><path d="M12 3v18"/><circle cx="12" cy="8" r="0.9" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="0.9" fill="currentColor" stroke="none"/><circle cx="12" cy="16" r="0.9" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-strings" viewBox="0 0 24 24"><path d="M9 3c-2 2-2 4 0 6s2 4 0 6-2 4 0 6M15 3c2 2 2 4 0 6s-2 4 0 6 2 4 0 6"/></symbol>
+  <symbol id="i-keys" viewBox="0 0 24 24"><rect x="3.5" y="6" width="17" height="12" rx="2"/><path d="M8 6v7M12 6v7M16 6v7"/></symbol>
+  <symbol id="i-perc" viewBox="0 0 24 24"><ellipse cx="12" cy="7" rx="7" ry="3"/><path d="M5 7v8a7 3 0 0 0 14 0V7"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="9" rx="2"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8M12 3.6c2.6 2.3 4 5.2 4 8.4s-1.4 6.1-4 8.4c-2.6-2.3-4-5.2-4-8.4s1.4-6.1 4-8.4Z"/></symbol>
+  <symbol id="i-store" viewBox="0 0 24 24"><rect x="4" y="3.5" width="16" height="17" rx="3"/><path d="M10 8.3v7.4l6-3.7Z" fill="currentColor" stroke="none"/></symbol>
+</svg>
+
 <header class="site">
   <div class="wrap nav">
     <a class="brand" href="/"><img src="/assets/gptuner_mark.png" alt=""> GPTuner</a>
     <nav class="navlinks">
-      <a href="#tuner">Tuner</a>
-      <a href="#train">Train</a>
-      <a href="#record">Record</a>
-      <a href="#instruments">Instruments</a>
+      <a href="#tuner" data-i18n="nav.tuner">Afinador</a>
+      <a href="#train" data-i18n="nav.train">Entrenar</a>
+      <a href="#record" data-i18n="nav.record">Grabar</a>
+      <a href="#instruments" data-i18n="nav.instruments">Instrumentos</a>
     </nav>
-    <a class="cta-mini" href="#download">Coming soon</a>
+    <div class="langsel" id="langsel"></div>
+    <a class="cta-mini" href="#download" data-i18n="nav.soon">Muy pronto</a>
   </div>
 </header>
 
 <section class="hero wrap">
-  <span class="eyebrow">For musicians on any instrument</span>
-  <h1>Tune, keep tempo,<br>and <em>train your ear</em> for real</h1>
-  <p class="lead">GPTuner brings a precision tuner, a metronome and a gamified music trainer into one app. No ads, no clutter — built to make daily practice better.</p>
-  <div class="hero-actions">
-    <a class="btn btn-primary" href="#download">Get notified</a>
-    <a class="btn btn-ghost" href="#train">See how it works</a>
-  </div>
-  <div class="store-pills">
-    <span class="store-pill">📱 Google Play — coming soon</span>
-    <span class="store-pill">🍎 App Store — coming soon</span>
-  </div>
-
-  <div class="mock" aria-hidden="true">
-    <div class="row"><span class="dot">🎺</span> <span class="mock-label">Trumpet · A 442 Hz</span></div>
-    <div class="center">
-      <div class="note">A4</div>
-      <div class="hz">440.02 Hz</div>
-      <div class="meter"><i></i></div>
-      <span class="pill">+0.4 cents</span>
+  <div class="hero-grid">
+    <div>
+      <span class="kicker" data-i18n="hero.kicker">Para músicos de cualquier instrumento</span>
+      <h1><span data-i18n="hero.title1">Afina, marca el tempo,</span> <em data-i18n="hero.title_em">entrena tu oído</em> <span data-i18n="hero.title2">de verdad</span></h1>
+      <p class="lead" data-i18n="hero.lead">GPTuner es un afinador de precisión, un metrónomo y un entrenador musical gamificado en una sola app. Sin anuncios, sin distracciones.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#download" data-i18n="hero.cta1">Ver disponibilidad</a>
+        <a class="btn btn-ghost" href="#train" data-i18n="hero.cta2">Cómo funciona</a>
+      </div>
+      <div class="store-row">
+        <div><svg class="icon"><use href="#i-store"/></svg> <span data-i18n="store.play">Google Play</span> — <span data-i18n="store.soon">próximamente</span></div>
+        <div><svg class="icon"><use href="#i-store"/></svg> <span data-i18n="store.appstore">App Store</span> — <span data-i18n="store.soon">próximamente</span></div>
+      </div>
     </div>
-    <div class="bpm"><b>112</b><span>BPM · 4/4</span></div>
+
+    <div class="mock" aria-hidden="true">
+      <div class="row"><span class="dot"><svg class="icon"><use href="#i-brass"/></svg></span> <span class="mock-label" data-i18n="mock.instrument">Trompeta · La 442 Hz</span></div>
+      <div class="center">
+        <div class="note">La4</div>
+        <div class="hz">440.02 Hz</div>
+        <div class="meter"><i></i></div>
+        <span class="pill">+0.4 cents</span>
+      </div>
+      <div class="bpm"><b>112</b><span>BPM · 4/4</span></div>
+    </div>
   </div>
 </section>
 
 <section id="tuner">
   <div class="wrap">
     <div class="section-head">
-      <span class="eyebrow">Core</span>
-      <h2>A studio-grade tuner and metronome</h2>
-      <p>The engine professionals rely on, in your pocket. Real-time pitch detection and a metronome that never misses a beat.</p>
+      <span class="kicker" data-i18n="tuner.kicker">Núcleo</span>
+      <h2 data-i18n="tuner.title">Afinador y metrónomo de estudio</h2>
+      <p data-i18n="tuner.lead">El motor que usan los profesionales, en tu bolsillo. Detección de tono en tiempo real y un metrónomo que no falla un pulso.</p>
     </div>
-    <div class="grid">
-      <div class="card"><div class="ic ic-green">🎯</div><h3>Cent-accurate</h3><p>YIN pitch detection with noise reduction, built to keep working even in noisy rooms.</p></div>
-      <div class="card"><div class="ic ic-teal">🥁</div><h3>Full metronome</h3><p>Irregular meters, subdivisions, custom accents and tap tempo, from 20 to 300 BPM.</p></div>
-      <div class="card"><div class="ic ic-gold">🎼</div><h3>Fingering guide</h3><p>Shows the real fingering for every note on your instrument as you play, in sounding or written pitch.</p></div>
-      <div class="card"><div class="ic ic-coral">🔇</div><h3>Zero distractions</h3><p>No ads and no subscriptions getting in the way of your daily practice.</p></div>
+    <div class="bento">
+      <div class="card span-3"><div class="ic ic-green"><svg class="icon"><use href="#i-target"/></svg></div><h3 data-i18n="tuner.c1.t">Precisión al cent</h3><p data-i18n="tuner.c1.d">Detección de tono YIN con reductor de ruido, pensada para funcionar incluso en salas ruidosas.</p></div>
+      <div class="card span-3"><div class="ic ic-teal"><svg class="icon"><use href="#i-metronome"/></svg></div><h3 data-i18n="tuner.c2.t">Metrónomo completo</h3><p data-i18n="tuner.c2.d">Compases irregulares, subdivisiones, acentos personalizados y tap tempo, de 20 a 300 BPM.</p></div>
+      <div class="card span-4"><div class="ic ic-gold"><svg class="icon"><use href="#i-guide"/></svg></div><h3 data-i18n="tuner.c3.t">Guía de digitación</h3><p data-i18n="tuner.c3.d">Muestra la digitación real de cada nota en tu instrumento mientras tocas, con notación real o escrita.</p></div>
+      <div class="card span-2"><div class="ic ic-coral"><svg class="icon"><use href="#i-mute"/></svg></div><h3 data-i18n="tuner.c4.t">Sin distracciones</h3><p data-i18n="tuner.c4.d">Sin anuncios ni suscripciones.</p></div>
     </div>
   </div>
 </section>
@@ -71,24 +99,22 @@
 <section id="train">
   <div class="wrap">
     <div class="section-head">
-      <span class="eyebrow">Training</span>
-      <h2>A musical path with real levels</h2>
-      <p>6 levels, dozens of exercises in tuning, rhythm, ear training and scales. A placement test starts you at the right level; how far you go is up to you.</p>
+      <span class="kicker" data-i18n="train.kicker">Entrenamiento</span>
+      <h2 data-i18n="train.title">Un camino musical con niveles de verdad</h2>
+      <p data-i18n="train.lead">6 niveles, decenas de ejercicios de afinación, ritmo, oído y escalas. Un examen inicial te coloca en tu nivel; tú decides hasta dónde llegar.</p>
     </div>
-    <div class="train-grid">
+    <div class="hero-grid align-start">
       <div class="grid train-grid-inner">
-        <div class="card"><div class="ic ic-green">🎯</div><h3>Tuning</h3><p>Hold the target note within tolerance and measure your real stability.</p></div>
-        <div class="card"><div class="ic ic-teal">⏱️</div><h3>Rhythm</h3><p>Tap along with the metronome's pulse; your timing accuracy is measured live.</p></div>
-        <div class="card"><div class="ic ic-gold">👂</div><h3>Ear training</h3><p>Recognize intervals generated in real time, different every round.</p></div>
-        <div class="card"><div class="ic ic-coral">🎹</div><h3>Scales</h3><p>Play the scale note by note; each one is validated by its real intonation.</p>
-          <p class="mt-8"><span class="badge-soon">Sight-reading & articulation · coming soon</span></p></div>
+        <div class="card"><div class="ic ic-green"><svg class="icon"><use href="#i-target"/></svg></div><h3 data-i18n="train.c1.t">Afinación</h3><p data-i18n="train.c1.d">Sostén la nota objetivo dentro de tolerancia y mide tu estabilidad real.</p></div>
+        <div class="card"><div class="ic ic-teal"><svg class="icon"><use href="#i-clock"/></svg></div><h3 data-i18n="train.c2.t">Ritmo</h3><p data-i18n="train.c2.d">Toca sobre el pulso del metrónomo; se mide tu precisión de tempo.</p></div>
+        <div class="card"><div class="ic ic-gold"><svg class="icon"><use href="#i-ear"/></svg></div><h3 data-i18n="train.c3.t">Oído</h3><p data-i18n="train.c3.d">Reconoce intervalos generados en tiempo real, cada vez distintos.</p></div>
+        <div class="card"><div class="ic ic-coral"><svg class="icon"><use href="#i-scale"/></svg></div><h3 data-i18n="train.c4.t">Escalas</h3><p data-i18n="train.c4.d">Toca la escala nota a nota; cada una se valida por su afinación real.</p>
+          <p class="mt-8"><span class="badge-soon" data-i18n="train.soon">Lectura y articulación · próximamente</span></p></div>
       </div>
       <div class="path" aria-hidden="true">
-        <div class="lvl on"><div class="node on">1</div><span class="label">Foundations — completed</span></div>
-        <div class="line"></div>
-        <div class="lvl on"><div class="node on">2</div><span class="label">Beginner — in progress</span></div>
-        <div class="line"></div>
-        <div class="lvl"><div class="node">🔒</div><span class="label">Intermediate — locked</span></div>
+        <div class="lvl"><div class="node on">1</div><div class="label"><b data-i18n="path.l1">Fundamentos</b><span data-i18n="path.l1s">completado</span></div></div>
+        <div class="lvl"><div class="node on">2</div><div class="label"><b data-i18n="path.l2">Iniciación</b><span data-i18n="path.l2s">en curso</span></div></div>
+        <div class="lvl locked"><div class="node"><svg class="icon"><use href="#i-lock"/></svg></div><div class="label"><b data-i18n="path.l3">Intermedio</b><span data-i18n="path.l3s">bloqueado</span></div></div>
       </div>
     </div>
   </div>
@@ -97,14 +123,14 @@
 <section id="record">
   <div class="wrap">
     <div class="section-head">
-      <span class="eyebrow">Recorder</span>
-      <h2>Record your sessions, with or without a click</h2>
-      <p>Capture your practice and play it back with a real waveform. Rename, browse and revisit your progress over time.</p>
+      <span class="kicker" data-i18n="record.kicker">Grabadora</span>
+      <h2 data-i18n="record.title">Graba tus sesiones, con o sin metrónomo</h2>
+      <p data-i18n="record.lead">Captura tus prácticas y escúchalas después con su forma de onda real. Renombra, ordena y revisa tu progreso a lo largo del tiempo.</p>
     </div>
     <div class="grid">
-      <div class="card"><div class="ic ic-green">🎙️</div><h3>Instant recording</h3><p>Start, pause and resume without ever losing a beat.</p></div>
-      <div class="card"><div class="ic ic-teal">🥁</div><h3>Built-in metronome</h3><p>Record at the tempo and meter you need, right in the background.</p></div>
-      <div class="card"><div class="ic ic-gold">🗂️</div><h3>Your sound library</h3><p>Every recording organized, with date, duration and instrument.</p></div>
+      <div class="card"><div class="ic ic-green"><svg class="icon"><use href="#i-mic"/></svg></div><h3 data-i18n="record.c1.t">Grabación al instante</h3><p data-i18n="record.c1.d">Empieza, pausa y reanuda sin perder ni un segundo.</p></div>
+      <div class="card"><div class="ic ic-teal"><svg class="icon"><use href="#i-rec"/></svg></div><h3 data-i18n="record.c2.t">Metrónomo integrado</h3><p data-i18n="record.c2.d">Graba con el tempo y el compás que necesites, de fondo.</p></div>
+      <div class="card"><div class="ic ic-gold"><svg class="icon"><use href="#i-folder"/></svg></div><h3 data-i18n="record.c3.t">Tu archivo sonoro</h3><p data-i18n="record.c3.d">Todas tus grabaciones organizadas, con fecha, duración e instrumento.</p></div>
     </div>
   </div>
 </section>
@@ -112,25 +138,33 @@
 <section id="instruments">
   <div class="wrap">
     <div class="section-head">
-      <span class="eyebrow">Compatibility</span>
-      <h2>30+ instruments supported</h2>
-      <p>Brass, woodwind, strings, keyboard and percussion — each with its own range and its own fingering.</p>
+      <span class="kicker" data-i18n="instruments.kicker">Compatibilidad</span>
+      <h2 data-i18n="instruments.title">Más de 30 instrumentos</h2>
+      <p data-i18n="instruments.lead">Metales, maderas, cuerdas, teclado y percusión — cada uno con su rango y su digitación propia.</p>
     </div>
-    <div class="grid instruments-grid">
-      <div class="card">🎺<br><small class="instrument-label">Brass</small></div>
-      <div class="card">🎷<br><small class="instrument-label">Woodwind</small></div>
-      <div class="card">🎻<br><small class="instrument-label">Strings</small></div>
-      <div class="card">🎹<br><small class="instrument-label">Keyboard</small></div>
-      <div class="card">🥁<br><small class="instrument-label">Percussion</small></div>
+    <div class="instrument-strip">
+      <div><svg><use href="#i-brass"/></svg><span data-i18n="instruments.brass">Metales</span></div>
+      <div><svg><use href="#i-wood"/></svg><span data-i18n="instruments.wood">Maderas</span></div>
+      <div><svg><use href="#i-strings"/></svg><span data-i18n="instruments.strings">Cuerdas</span></div>
+      <div><svg><use href="#i-keys"/></svg><span data-i18n="instruments.keys">Teclado</span></div>
+      <div><svg><use href="#i-perc"/></svg><span data-i18n="instruments.perc">Percusión</span></div>
     </div>
   </div>
 </section>
 
 <section id="download">
-  <div class="cta-band">
-    <h2>GPTuner is almost here</h2>
-    <p>We're polishing the final details before launching on Google Play and the App Store. Reach out with any questions or feedback.</p>
-    <a class="btn btn-primary" href="mailto:soporte@getmagicrent.com?subject=GPTuner">Get in touch</a>
+  <div class="wrap">
+    <div class="cta-band">
+      <div>
+        <h2 data-i18n="cta.title">GPTuner llega muy pronto</h2>
+        <p data-i18n="cta.lead">Estamos ultimando los últimos detalles antes de publicar la app en Google Play y App Store. Déjanos tu opinión o dudas en soporte.</p>
+        <a class="btn btn-primary" href="mailto:soporte@getmagicrent.com?subject=GPTuner" data-i18n="cta.button">Escríbenos</a>
+      </div>
+      <div class="mock mock-tilt-right" aria-hidden="true">
+        <div class="row"><span class="dot"><svg class="icon"><use href="#i-metronome"/></svg></span> <span class="mock-label">112 BPM</span></div>
+        <div class="center"><div class="bpm bpm-plain"><b>4</b><span>/ 4</span></div></div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -139,16 +173,18 @@
     <div class="footer-grid">
       <div class="footer-brand"><img src="/assets/gptuner_mark.png" alt=""> GPTuner</div>
       <div class="footer-links">
-        <a href="/privacy.html">Privacy</a>
-        <a href="/terms.html">Terms of Use</a>
-        <a href="/support.html">Support</a>
-        <a href="/delete-account.html">Delete Account</a>
+        <a href="/privacidad.html" data-i18n="footer.privacy" data-i18n-legal="privacidad.html|privacy.html">Privacidad</a>
+        <a href="/terminos.html" data-i18n="footer.terms" data-i18n-legal="terminos.html|terms.html">Términos de uso</a>
+        <a href="/soporte.html" data-i18n="footer.support" data-i18n-legal="soporte.html|support.html">Soporte</a>
+        <a href="/eliminar-cuenta.html" data-i18n="footer.delete" data-i18n-legal="eliminar-cuenta.html|delete-account.html">Eliminar cuenta</a>
         <a href="mailto:soporte@getmagicrent.com">soporte@getmagicrent.com</a>
       </div>
     </div>
-    <p class="copyright">© 2026 GPTuner · Alejandro Luque. All rights reserved.</p>
+    <p class="copyright" data-i18n="footer.copy">© 2026 GPTuner · Alejandro Luque. Todos los derechos reservados.</p>
   </div>
 </footer>
 
+<script src="/i18n-data.js"></script>
+<script src="/i18n.js"></script>
 </body>
 </html>
