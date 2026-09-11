@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>GPTuner — Afinador, metrónomo y entrenamiento musical</title>
-<meta name="description" content="GPTuner: afinador de precisión, metrónomo y entrenamiento musical gamificado para más de 30 instrumentos. Próximamente en iOS y Android.">
+<meta name="description" content="GPTuner: afinador de precisión, metrónomo y entrenamiento musical gamificado para más de 30 instrumentos. Prueba el dial y el oído en vivo. Próximamente en iOS y Android.">
 <link rel="icon" href="/assets/gptuner_mark.png">
 <meta property="og:title" content="GPTuner — Afinador, metrónomo y entrenamiento musical">
 <meta property="og:description" content="Afina con precisión, marca el tempo y entrena tu oído y tu ritmo con GPTuner.">
@@ -35,6 +35,8 @@
   <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
   <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.4"/><path d="M3.6 12h16.8M12 3.6c2.6 2.3 4 5.2 4 8.4s-1.4 6.1-4 8.4c-2.6-2.3-4-5.2-4-8.4s1.4-6.1 4-8.4Z"/></symbol>
   <symbol id="i-store" viewBox="0 0 24 24"><rect x="4" y="3.5" width="16" height="17" rx="3"/><path d="M10 8.3v7.4l6-3.7Z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-drag" viewBox="0 0 24 24"><path d="M8 5 5 8m0 0 3 3M5 8h6M16 5l3 3m0 0-3 3m3-3h-6M8 19l-3-3m0 0 3-3m-3 3h6m5 3 3-3m0 0-3-3m3 3h-6"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 5.5v13l11-6.5Z" fill="currentColor" stroke="none"/></symbol>
 </svg>
 
 <header class="site">
@@ -55,11 +57,11 @@
   <div class="hero-grid">
     <div>
       <span class="kicker" data-i18n="hero.kicker">Para músicos de cualquier instrumento</span>
-      <h1><span data-i18n="hero.title1">Afina, marca el tempo,</span> <em data-i18n="hero.title_em">entrena tu oído</em> <span data-i18n="hero.title2">de verdad</span></h1>
+      <h1><span data-i18n="hero.title1">Afina, marca el tempo,</span> <span data-i18n="hero.title_em">entrena tu oído</span> <span data-i18n="hero.title2">de verdad</span></h1>
       <p class="lead" data-i18n="hero.lead">GPTuner es un afinador de precisión, un metrónomo y un entrenador musical gamificado en una sola app. Sin anuncios, sin distracciones.</p>
       <div class="hero-actions">
         <a class="btn btn-primary" href="#download" data-i18n="hero.cta1">Ver disponibilidad</a>
-        <a class="btn btn-ghost" href="#train" data-i18n="hero.cta2">Cómo funciona</a>
+        <a class="btn btn-ghost" href="#tuner" data-i18n="hero.cta2">Prueba el dial</a>
       </div>
       <div class="store-row">
         <div><svg class="icon"><use href="#i-store"/></svg> <span data-i18n="store.play">Google Play</span> — <span data-i18n="store.soon">próximamente</span></div>
@@ -67,15 +69,44 @@
       </div>
     </div>
 
-    <div class="mock" aria-hidden="true">
-      <div class="row"><span class="dot"><svg class="icon"><use href="#i-brass"/></svg></span> <span class="mock-label" data-i18n="mock.instrument">Trompeta · La 442 Hz</span></div>
-      <div class="center">
-        <div class="note">La4</div>
-        <div class="hz">440.02 Hz</div>
-        <div class="meter"><i></i></div>
-        <span class="pill">+0.4 cents</span>
+    <div class="dial-card">
+      <div class="row">
+        <span class="who"><svg class="icon"><use href="#i-brass"/></svg> <span class="mock-label" data-i18n="mock.instrument">Trompeta · La 442 Hz</span></span>
+        <span class="dial-hint"><svg class="icon icon-sm"><use href="#i-drag"/></svg> <span data-i18n="dial.hint">arrastra</span></span>
       </div>
-      <div class="bpm"><b>112</b><span>BPM · 4/4</span></div>
+      <div class="dial" id="dial" tabindex="0" role="slider" aria-valuemin="-50" aria-valuemax="50" aria-valuenow="0" aria-label="Tuning cents demo">
+        <svg viewBox="0 0 300 170" aria-hidden="true">
+          <path d="M 39.1 88 A 128 128 0 0 1 260.9 88" fill="none" stroke="var(--line)" stroke-width="3" stroke-linecap="round"/>
+          <path d="M 142 24.3 A 128 128 0 0 1 158 24.3" fill="none" stroke="var(--green)" stroke-width="6" stroke-linecap="round" opacity="0.9"/>
+          <line x1="63.4" y1="102" x2="47.8" y2="93" stroke="var(--muted)" stroke-width="2"/>
+          <line x1="75.7" y1="85.1" x2="62.3" y2="73" stroke="var(--line)" stroke-width="1.5"/>
+          <line x1="91.2" y1="71.1" x2="80.6" y2="56.5" stroke="var(--line)" stroke-width="1.5"/>
+          <line x1="109.3" y1="60.6" x2="102" y2="44.2" stroke="var(--line)" stroke-width="1.5"/>
+          <line x1="129.2" y1="54.2" x2="125.5" y2="36.6" stroke="var(--line)" stroke-width="1.5"/>
+          <line x1="150" y1="52" x2="150" y2="34" stroke="var(--teal)" stroke-width="2.5"/>
+          <line x1="170.8" y1="54.2" x2="174.5" y2="36.6" stroke="var(--line)" stroke-width="1.5"/>
+          <line x1="190.7" y1="60.6" x2="198" y2="44.2" stroke="var(--line)" stroke-width="1.5"/>
+          <line x1="208.8" y1="71.1" x2="219.4" y2="56.5" stroke="var(--line)" stroke-width="1.5"/>
+          <line x1="224.3" y1="85.1" x2="237.7" y2="73" stroke="var(--line)" stroke-width="1.5"/>
+          <line x1="236.6" y1="102" x2="252.2" y2="93" stroke="var(--muted)" stroke-width="2"/>
+          <text x="42" y="120" fill="var(--muted)" font-size="13" font-family="var(--mono)">♭</text>
+          <text x="252" y="120" fill="var(--muted)" font-size="13" font-family="var(--mono)">♯</text>
+          <g id="dial-needle" transform="rotate(0 150 152)">
+            <line x1="150" y1="152" x2="150" y2="44" stroke="var(--green)" stroke-width="3.5" stroke-linecap="round"/>
+            <circle cx="150" cy="152" r="7" fill="var(--card-a)" stroke="var(--green)" stroke-width="2.5"/>
+          </g>
+        </svg>
+        <div class="dial-note" id="dial-note">A4</div>
+        <div class="dial-hz" id="dial-hz">440.00 Hz</div>
+      </div>
+      <div class="center"><span class="dial-cents" id="dial-cents">0.0 cents</span></div>
+    </div>
+  </div>
+
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <span><b>±1</b> CENT ACCURACY</span><span><b>20–300</b> BPM</span><span><b>30+</b> INSTRUMENTS</span><span><b>6</b> TRAINING LEVELS</span><span><b>0</b> ADS</span>
+      <span><b>±1</b> CENT ACCURACY</span><span><b>20–300</b> BPM</span><span><b>30+</b> INSTRUMENTS</span><span><b>6</b> TRAINING LEVELS</span><span><b>0</b> ADS</span>
     </div>
   </div>
 </section>
@@ -104,7 +135,7 @@
       <p data-i18n="train.lead">6 niveles, decenas de ejercicios de afinación, ritmo, oído y escalas. Un examen inicial te coloca en tu nivel; tú decides hasta dónde llegar.</p>
     </div>
     <div class="hero-grid align-start">
-      <div class="grid train-grid-inner">
+      <div class="grid grid-2">
         <div class="card"><div class="ic ic-green"><svg class="icon"><use href="#i-target"/></svg></div><h3 data-i18n="train.c1.t">Afinación</h3><p data-i18n="train.c1.d">Sostén la nota objetivo dentro de tolerancia y mide tu estabilidad real.</p></div>
         <div class="card"><div class="ic ic-teal"><svg class="icon"><use href="#i-clock"/></svg></div><h3 data-i18n="train.c2.t">Ritmo</h3><p data-i18n="train.c2.d">Toca sobre el pulso del metrónomo; se mide tu precisión de tempo.</p></div>
         <div class="card"><div class="ic ic-gold"><svg class="icon"><use href="#i-ear"/></svg></div><h3 data-i18n="train.c3.t">Oído</h3><p data-i18n="train.c3.d">Reconoce intervalos generados en tiempo real, cada vez distintos.</p></div>
@@ -115,6 +146,22 @@
         <div class="lvl"><div class="node on">1</div><div class="label"><b data-i18n="path.l1">Fundamentos</b><span data-i18n="path.l1s">completado</span></div></div>
         <div class="lvl"><div class="node on">2</div><div class="label"><b data-i18n="path.l2">Iniciación</b><span data-i18n="path.l2s">en curso</span></div></div>
         <div class="lvl locked"><div class="node"><svg class="icon"><use href="#i-lock"/></svg></div><div class="label"><b data-i18n="path.l3">Intermedio</b><span data-i18n="path.l3s">bloqueado</span></div></div>
+      </div>
+    </div>
+
+    <div class="tryit mt-14">
+      <div class="side-a">
+        <h3 data-i18n="ear.title">Prueba tu oído ahora mismo</h3>
+        <p data-i18n="ear.desc">Suenan dos notas generadas en directo. ¿La segunda es más alta o más baja? Sin trampa: cada ronda es un intervalo nuevo.</p>
+        <p class="ear-score"><span data-i18n="ear.scoreLabel">Aciertos</span>: <span id="ear-score">0 / 0</span></p>
+      </div>
+      <div class="side-b">
+        <button class="btn btn-primary" id="ear-play" type="button"><svg class="icon"><use href="#i-play"/></svg> <span data-i18n="ear.play">Reproducir</span></button>
+        <div class="ear-status" id="ear-status" data-i18n="ear.status.initial">Pulsa reproducir para empezar</div>
+        <div class="ear-buttons">
+          <button class="btn btn-ghost" id="ear-lower" type="button" disabled data-i18n="ear.lower">Más baja</button>
+          <button class="btn btn-ghost" id="ear-higher" type="button" disabled data-i18n="ear.higher">Más alta</button>
+        </div>
       </div>
     </div>
   </div>
@@ -160,9 +207,11 @@
         <p data-i18n="cta.lead">Estamos ultimando los últimos detalles antes de publicar la app en Google Play y App Store. Déjanos tu opinión o dudas en soporte.</p>
         <a class="btn btn-primary" href="mailto:soporte@getmagicrent.com?subject=GPTuner" data-i18n="cta.button">Escríbenos</a>
       </div>
-      <div class="mock mock-tilt-right" aria-hidden="true">
-        <div class="row"><span class="dot"><svg class="icon"><use href="#i-metronome"/></svg></span> <span class="mock-label">112 BPM</span></div>
-        <div class="center"><div class="bpm bpm-plain"><b>4</b><span>/ 4</span></div></div>
+      <div class="mono-block">
+        NAME&nbsp;&nbsp;&nbsp;<b>GPTuner</b><br>
+        ENGINE&nbsp;<b>YIN</b> + noise gate<br>
+        RANGE&nbsp;&nbsp;30+ instruments<br>
+        STATUS&nbsp;<b>pre-launch</b>
       </div>
     </div>
   </div>
@@ -186,5 +235,6 @@
 
 <script src="/i18n-data.js"></script>
 <script src="/i18n.js"></script>
+<script src="/interactive.js"></script>
 </body>
 </html>
