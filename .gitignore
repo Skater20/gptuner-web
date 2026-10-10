@@ -1,0 +1,24 @@
+
+# --- Red de seguridad: secretos que nunca deben entrar en git ---
+.env
+.env.*
+!.env.example
+!.env.sample
+env/*.json
+!env/example.json
+*.jks
+*.keystore
+key.properties
+*service-account*.json
+*service_account*.json
+*serviceAccount*.json
+*adminsdk*.json
+*.p8
+*.p12
+*.pfx
+*.pem
+credentials.json
+id_rsa*
+id_ed25519*
+hola
+hola.pub
