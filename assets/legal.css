@@ -1,5 +1,5 @@
 /* Páginas legales y de soporte. Mismos tokens que site.css (se carga antes). */
-.legal-header{border-bottom:1px solid rgba(211,234,218,.07);background:rgba(7,22,16,.94)}
+.legal-header{position:sticky;top:0;z-index:20;border-bottom:1px solid rgba(213,239,172,.1);background:rgba(6,19,15,.72);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4)}
 .legal-header .header-inner{min-height:80px;gap:20px}
 .legal-header .legal-nav{display:flex;gap:22px;align-items:center;margin-inline-start:auto;font-size:13px;color:#c0cdc4}
 .legal-header .legal-nav a{display:flex;align-items:center;min-height:44px}
@@ -40,3 +40,8 @@
   .legal-main{padding-block:40px 56px}
   .legal-main .lead{font-size:16px}
 }
+.legal-main .eyebrow{display:inline-flex;align-items:center;gap:9px;padding:7px 14px;border:1px solid rgba(213,239,172,.22);border-radius:999px;background:rgba(213,239,172,.05);letter-spacing:.18em}
+.legal-main h1{font-weight:650;letter-spacing:-.035em}
+.legal-main h2{font-weight:650;letter-spacing:-.02em}
+.legal-card{border-radius:22px;background:linear-gradient(180deg,rgba(21,49,40,.6),rgba(12,32,26,.4))}
+.legal-lang{border-radius:999px}.legal-lang a{border-radius:999px}
