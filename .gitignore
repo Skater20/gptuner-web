@@ -22,3 +22,7 @@ id_rsa*
 id_ed25519*
 hola
 hola.pub
+
+# Wrangler (pruebas locales)
+.wrangler/
+node_modules/

@@ -1,0 +1,43 @@
+/* Test access: the same form works inline without JavaScript and in a dialog with it. */
+.access-panel{width:min(100%,540px);margin:40px auto 0;padding:30px;background:var(--surface);border:1px solid var(--line);border-radius:24px;color:var(--paper);scroll-margin-top:100px;overflow-wrap:anywhere}
+.access-panel [hidden]{display:none!important}
+.access-top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-block-end:24px}
+.access-brand{display:inline-flex;align-items:center;gap:7px;font-size:19px;font-weight:600;direction:ltr}
+.access-brand .brand-mark{width:32px;height:32px}
+.access-dialog{position:fixed;inset:0;width:min(540px,calc(100% - 32px));max-width:540px;max-height:calc(100dvh - 32px);margin:auto;padding:0;background:var(--surface);color:var(--paper);border:1px solid #4b6956;border-radius:24px;box-shadow:0 30px 100px #0008;overflow-y:auto;overscroll-behavior:contain}
+.access-dialog::backdrop{background:rgba(0,9,5,.82);backdrop-filter:blur(5px)}
+.access-dialog .access-panel{width:100%;margin:0;border:0}
+.access-close{width:44px;height:44px}
+.access-panel h2{font-size:clamp(25px,5vw,32px);letter-spacing:-.8px;line-height:1.22;margin-block-end:12px;padding-inline-end:8px}
+.access-description,.access-success>p{font-size:14px;line-height:1.75;color:var(--muted)}
+#access-form{margin-block-start:25px}
+.access-field{margin-block-end:18px}
+.access-field>label,.access-devices>legend{display:block;padding:0;margin-block-end:9px;font-size:13px;font-weight:550;color:var(--paper)}
+.access-field>input{display:block;width:100%;min-width:0;min-height:52px;border:1px solid #52675a;border-radius:9px;padding:13px 15px;background:#091b12;color:var(--paper);font:inherit;font-size:16px;line-height:1.4}
+.access-field>input:focus-visible,.access-device:has(input:focus-visible){outline:3px solid #87d9c2;outline-offset:3px}
+.access-field>input:user-invalid{border-color:#f2b1a5}
+.access-field>input:autofill{box-shadow:0 0 0 100px #14271e inset;-webkit-text-fill-color:var(--paper)}
+.access-devices{margin:23px 0 0;padding:0;border:0;min-width:0}
+.access-device-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.access-device{position:relative;display:flex;align-items:center;gap:12px;min-height:58px;padding:16px;border:1px solid #52675a;border-radius:10px;background:#091b12;cursor:pointer;font-size:15px;line-height:1.4;transition:background .15s,border-color .15s}
+.access-device input{position:absolute;opacity:0;width:1px;height:1px;inset-inline-start:20px;inset-block-start:50%;margin:0}
+.access-device:hover{border-color:var(--mint)}
+.access-device:has(input:checked){border-color:var(--mint);background:#243c2b;color:var(--mint)}
+.device-radio{width:18px;height:18px;flex-shrink:0;border:1.5px solid #93af9b;border-radius:50%;display:grid;place-items:center}
+.access-device input:checked+.device-radio{border-color:var(--mint)}
+.access-device input:checked+.device-radio::after{content:"";width:8px;height:8px;background:var(--mint);border-radius:50%}
+.access-privacy{margin-block:19px;font-size:11px;line-height:1.75;color:var(--muted)}
+.access-submit{width:100%;font-size:14px;min-height:54px}
+.access-submit:disabled{opacity:.7;cursor:wait;transform:none}
+.access-status{font-size:13px;line-height:1.7;margin-block-end:16px;padding:12px 14px;border-radius:9px;background:#263b2c;color:var(--mint)}
+.access-status[data-state="error"]{background:#332921;color:#ffd1bc;border:1px solid #6e4a3c}
+.access-fallback{font-size:11px;line-height:1.85;color:var(--muted);text-align:center;margin-block-start:23px;padding-block-start:20px;border-top:1px solid var(--line)}
+.access-fallback a{color:var(--mint);text-decoration:underline;text-underline-offset:3px;display:inline-block;padding-block:6px}
+.access-success{padding-block:9px 16px}
+.access-success-icon{display:grid;place-items:center;width:54px;height:54px;border-radius:50%;background:var(--mint);color:var(--ink);margin-block-end:20px}
+.access-success-icon svg{width:28px;height:28px}
+.access-success .button{width:100%;margin-block-start:28px}
+.access-trap{display:none!important}
+[dir="rtl"] .access-panel h2{letter-spacing:0;line-height:1.4}
+@media(max-width:480px){.access-panel{padding:23px 20px;border-radius:19px}.access-dialog{width:calc(100% - 20px);max-height:calc(100dvh - 20px);border-radius:20px}.access-top{margin-block-end:20px}.access-panel h2{font-size:27px}.access-device{padding:15px 12px;gap:9px}.access-description{font-size:13px}.access-fallback{margin-block-start:20px}}
+@media print{.access-dialog,.access-panel{display:none!important}}
