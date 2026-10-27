@@ -44,7 +44,7 @@
   // Aparición al hacer scroll: solo lo que todavía no se ve, para no ocultar nada ya pintado.
   const revealTargets = [
     '.tool-strip > span', '.workspace-heading', '.workspace-step', '.save-strip', '.updates-section > .eyebrow',
-    '.update-grid article', '.tools-section .section-heading', '.tools-module', '.gallery-heading', '.gallery-item',
+    '.update-grid article', '.tools-section .section-heading', '.tools-module', '.gallery-heading', '.gallery-track',
     '.archive-note', '.early-card', '.follow-row', '.site-footer > *', '.legal-main > *'
   ];
   if ('IntersectionObserver' in window && !reduced.matches) {
@@ -75,22 +75,184 @@
     });
   }
 
-  // Inclinación suave de la demo del workspace (solo ratón y escritorio).
+  // Inclinación suave de la demo del workspace (solo ratón y escritorio); las capturas de detrás
+  // se desplazan al revés, como si estuvieran más lejos.
   const preview = $('.workspace-preview');
   const device = $('.workspace-device');
   if (preview && device && finePointer.matches && !reduced.matches) {
     preview.addEventListener('pointermove', e => {
       if (innerWidth < 700) return;
       const r = device.getBoundingClientRect();
-      const x = (e.clientX - r.left) / r.width - .5;
-      const y = (e.clientY - r.top) / r.height - .5;
+      const x = Math.max(-.5, Math.min(.5, (e.clientX - r.left) / r.width - .5));
+      const y = Math.max(-.5, Math.min(.5, (e.clientY - r.top) / r.height - .5));
       device.style.setProperty('--ry', (x * 7).toFixed(2) + 'deg');
       device.style.setProperty('--rx', (-y * 6).toFixed(2) + 'deg');
+      preview.style.setProperty('--hx', x.toFixed(3));
+      preview.style.setProperty('--hy', y.toFixed(3));
     }, {passive: true});
     preview.addEventListener('pointerleave', () => {
       device.style.setProperty('--ry', '0deg');
       device.style.setProperty('--rx', '0deg');
+      preview.style.setProperty('--hx', '0');
+      preview.style.setProperty('--hy', '0');
     });
+  }
+
+  // Parallax de las capturas del hero al hacer scroll. Solo donde se pintan (≥1280 px, igual que en
+  // premium.css) y con recorrido corto, para que nunca bajen hasta el pie de la demo.
+  const wideHero = window.matchMedia('(min-width: 1280px)');
+  if (preview && $('.hero-shots') && !reduced.matches) {
+    let pending = false;
+    const parallax = () => {
+      pending = false;
+      preview.style.setProperty('--sy', Math.min(scrollY, 400).toFixed(1));
+    };
+    addEventListener('scroll', () => {
+      if (!pending && wideHero.matches && scrollY < 800) { pending = true; requestAnimationFrame(parallax); }
+    }, {passive: true});
+    const sync = () => { if (wideHero.matches) parallax(); else preview.style.removeProperty('--sy'); };
+    if (wideHero.addEventListener) wideHero.addEventListener('change', sync);
+    sync();
+  }
+
+  // Pestañas de herramientas: la captura nueva entra desde el lado hacia el que avanzas.
+  const toolsModule = $('.tools-module');
+  const panels = $$('.tool-panel');
+  if (toolsModule && panels.length > 1 && 'MutationObserver' in window) {
+    let current = panels.findIndex(p => !p.hidden);
+    new MutationObserver(() => {
+      const now = panels.findIndex(p => !p.hidden);
+      if (now < 0 || now === current) return;
+      const rtl = document.documentElement.dir === 'rtl';
+      toolsModule.style.setProperty('--sd', String((now > current ? 1 : -1) * (rtl ? -1 : 1)));
+      current = now;
+    }).observe(toolsModule, {subtree: true, attributes: true, attributeFilter: ['hidden']});
+  }
+
+  // Galería: tarjeta central destacada, indicadores, arrastre con ratón y centrado inicial.
+  const track = $('#gallery');
+  const cards = track ? $$('.gallery-item', track) : [];
+  if (track && cards.length) {
+    const pad = n => String(n).padStart(2, '0');
+    const ui = document.createElement('div');
+    ui.className = 'mk-gallery-ui';
+    ui.setAttribute('aria-hidden', 'true');
+    const dots = document.createElement('div');
+    dots.className = 'mk-dots';
+    const count = document.createElement('span');
+    count.className = 'mk-count';
+    const center = (i, smooth) => {
+      const r = cards[i].getBoundingClientRect(), t = track.getBoundingClientRect();
+      track.scrollBy({left: (r.left + r.width / 2) - (t.left + t.width / 2), behavior: smooth && !reduced.matches ? 'smooth' : 'auto'});
+    };
+    cards.forEach((card, i) => {
+      const dot = document.createElement('i');
+      dot.addEventListener('click', () => center(i, true));
+      dots.append(dot);
+    });
+    ui.append(dots, count);
+    track.after(ui);
+    track.classList.add('mk-enhanced');
+
+    // Sin animaciones ligadas al scroll (Safari, Firefox) o en RTL, el destacado (--mk-f, de 0 fuera
+    // de la vista a 1 en el centro) se calcula aquí con la misma curva que @keyframes mk-focus.
+    const rtl = document.documentElement.dir === 'rtl';
+    const jsFocus = !reduced.matches && (rtl || !(window.CSS && CSS.supports && CSS.supports('animation-timeline: view()')));
+    let active = -1, queued = false;
+    const update = () => {
+      queued = false;
+      const t = track.getBoundingClientRect();
+      const mid = t.left + t.width / 2;
+      let best = 0, bestDistance = Infinity;
+      cards.forEach((card, i) => {
+        const r = card.getBoundingClientRect();
+        const d = Math.abs(r.left + r.width / 2 - mid);
+        if (d < bestDistance) { bestDistance = d; best = i; }
+        if (jsFocus) {
+          const p = Math.min(1, d / (t.width / 2 + card.offsetWidth / 2));
+          const f = p < .36 ? 1 - .5 * p / .36 : .5 - .5 * (p - .36) / .64;
+          card.style.setProperty('--mk-f', f.toFixed(3));
+        }
+      });
+      if (best === active) return;
+      active = best;
+      cards.forEach((card, i) => card.classList.toggle('is-center', i === best));
+      Array.from(dots.children).forEach((dot, i) => dot.classList.toggle('on', i === best));
+      const now = document.createElement('b');
+      now.textContent = pad(best + 1);
+      count.replaceChildren(now, ' / ' + pad(cards.length));
+    };
+    const queue = () => { if (!queued) { queued = true; requestAnimationFrame(update); } };
+    track.addEventListener('scroll', queue, {passive: true});
+    addEventListener('resize', queue, {passive: true});
+    // Con teclado, la captura enfocada pasa al centro.
+    track.addEventListener('focusin', e => {
+      const i = cards.indexOf(e.target.closest('.gallery-item'));
+      if (i >= 0 && e.target.matches(':focus-visible')) center(i, true);
+    });
+    // Las capturas que quedan fuera a los lados no se cargarían hasta entrar (loading="lazy" en un
+    // carrusel horizontal): se piden todas cuando la galería se acerca, para no ver marcos vacíos.
+    const lazy = $$('img[loading="lazy"]', track);
+    if (lazy.length && 'IntersectionObserver' in window) {
+      const near = new IntersectionObserver(entries => {
+        if (!entries.some(e => e.isIntersecting)) return;
+        near.disconnect();
+        lazy.forEach(img => { img.loading = 'eager'; });
+      }, {rootMargin: '800px 0px'});
+      near.observe(track);
+    }
+    // En pantallas anchas se empieza por la tarjeta del medio para que el carrusel quede equilibrado.
+    if (innerWidth >= 700) center(Math.floor((cards.length - 1) / 2), false);
+    update();
+
+    // Arrastre con ratón: sigue al cursor, conserva la inercia y se asienta en la tarjeta más cercana.
+    if (finePointer.matches) {
+      let down = false, dragging = false, suppress = false, startX = 0, startLeft = 0, lastX = 0, lastT = 0, speed = 0;
+      track.addEventListener('pointerdown', e => {
+        if (e.pointerType !== 'mouse' || e.button !== 0) return;
+        down = true; dragging = false; speed = 0;
+        startX = lastX = e.clientX; startLeft = track.scrollLeft; lastT = e.timeStamp;
+      });
+      addEventListener('pointermove', e => {
+        if (!down) return;
+        const dx = e.clientX - startX;
+        if (!dragging && Math.abs(dx) > 6) { dragging = true; track.classList.add('is-dragging'); }
+        if (!dragging) return;
+        e.preventDefault();
+        track.scrollLeft = startLeft - dx;
+        const dt = e.timeStamp - lastT;
+        if (dt > 0) speed = .75 * ((e.clientX - lastX) / dt) + .25 * speed;
+        lastX = e.clientX; lastT = e.timeStamp;
+      }, {passive: false});
+      const release = () => track.classList.remove('is-dragging');
+      const end = () => {
+        if (!down) return;
+        down = false;
+        if (!dragging) return;
+        suppress = true;
+        setTimeout(() => { suppress = false; }, 350);
+        const shift = -speed * 240;
+        const t = track.getBoundingClientRect();
+        const mid = t.left + t.width / 2;
+        let target = 0, best = Infinity;
+        cards.forEach(card => {
+          const r = card.getBoundingClientRect();
+          const offset = r.left + r.width / 2 - mid;
+          if (Math.abs(offset - shift) < best) { best = Math.abs(offset - shift); target = offset; }
+        });
+        track.scrollBy({left: target, behavior: reduced.matches ? 'auto' : 'smooth'});
+        if ('onscrollend' in window) track.addEventListener('scrollend', release, {once: true});
+        setTimeout(release, 900);
+      };
+      addEventListener('pointerup', end);
+      addEventListener('pointercancel', end);
+      // Un arrastre no abre la captura: el clic se anula antes de llegar al enlace (site.js).
+      track.addEventListener('click', e => {
+        if (!suppress) return;
+        e.preventDefault(); e.stopPropagation(); suppress = false;
+      }, true);
+      track.addEventListener('dragstart', e => e.preventDefault());
+    }
   }
 
   // La demo recorre sus ejemplos sola hasta que la persona toca un botón o pasa el ratón.

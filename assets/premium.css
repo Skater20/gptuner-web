@@ -33,7 +33,11 @@ body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opa
 
 h1,h2,h3{font-weight:600;letter-spacing:-.025em;text-wrap:balance}
 p{text-wrap:pretty}
-a:focus-visible,button:focus-visible,select:focus-visible,[tabindex]:focus-visible,:focus-visible{outline:2px solid var(--teal);outline-offset:4px;border-radius:6px}
+a:focus-visible,button:focus-visible,select:focus-visible,[tabindex]:focus-visible,:focus-visible{outline:2px solid var(--teal);outline-offset:4px}
+/* Solo los enlaces de texto redondean el foco: botones, pastillas y marcos conservan su forma. */
+:is(.text-link,.footer-links a,.legal-links a,.early-bottom a,.brand,.skip-link):focus-visible{border-radius:6px}
+/* Las capas decorativas (auroras, anillos) nunca generan scroll horizontal en móvil. */
+main{overflow-x:clip}
 
 /* Barra de progreso de lectura. */
 .mk-progress{position:fixed;inset-block-start:0;inset-inline:0;height:2px;z-index:60;pointer-events:none;
@@ -71,6 +75,10 @@ a:focus-visible,button:focus-visible,select:focus-visible,[tabindex]:focus-visib
 .icon-button{border-color:var(--line-strong);transition:background .25s,border-color .25s,transform .3s var(--ease-out)}
 .icon-button:hover{border-color:var(--mint);transform:translateY(-2px)}
 .text-link{font-weight:600;transition:color .25s}
+/* Respuesta al pulsar: todo lo pulsable se hunde un poco. */
+.button:active{transform:translateY(0) scale(.98);transition-duration:.12s}
+.icon-button:active,.mobile-toggle:active{transform:scale(.94);transition-duration:.12s}
+:is(.tool-tabs,.demo-presets) button:active{transform:scale(.97)}
 .text-link svg{transition:transform .35s var(--ease-out)}
 .text-link:hover svg{transform:translateY(3px)}
 
@@ -111,6 +119,10 @@ a:focus-visible,button:focus-visible,select:focus-visible,[tabindex]:focus-visib
 .gauge-arc{border-color:#2b4434}
 .demo-caption{font-size:11.5px;color:#9ab0a2}
 .demo-bottom{font-size:11px}
+/* Alto reservado para el ejemplo más alto (Escalas, medido en los 20 idiomas): al cambiar de ejemplo,
+   a mano o con la demo automática, el hero no cambia de alto ni empuja lo que hay debajo. */
+.demo-blocks{min-height:432px}
+@media(max-width:959px){.demo-blocks{min-height:426px}}
 
 /* Franja de herramientas. */
 .tool-strip{border-top:0;gap:12px;min-height:0;padding-block:28px 8px;justify-content:center;flex-wrap:wrap}
@@ -165,30 +177,131 @@ a:focus-visible,button:focus-visible,select:focus-visible,[tabindex]:focus-visib
 .tool-tabs button{border-radius:16px;font-size:14.5px;font-weight:600;transition:background .35s var(--ease),color .3s,box-shadow .35s}
 .tool-tabs button:hover{background:rgba(213,239,172,.05)}
 .tool-tabs button[aria-selected=true]{background:linear-gradient(135deg,var(--lime),var(--mint) 55%,var(--teal));color:#06130f;box-shadow:0 12px 30px -16px rgba(170,230,170,.6)}
-.tab-number{font-size:11px;font-weight:700;opacity:.55}
+.tab-number{font-size:11px;font-weight:700;opacity:.75;font-variant-numeric:tabular-nums}
 .tool-panel{position:relative}
-.tool-panel:not([hidden]){animation:mk-panel .6s var(--ease-out) both}
-@keyframes mk-panel{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.tool-panel:focus-visible{outline-offset:-8px;border-radius:24px}
 .tool-copy .eyebrow{font-size:11.5px;font-weight:700;letter-spacing:.2em;color:var(--mint)}
 .tiny-line{width:28px;background:linear-gradient(90deg,var(--mint),transparent)}
 .tool-copy h3{font-weight:650;letter-spacing:-.03em!important}
 .tool-copy>p:not(.eyebrow){font-size:16px;color:#bccbc1}
 .check-list li{font-size:14.5px;color:#d3dfd7;align-items:center}
 .check-list svg{width:22px;height:22px;padding:4px;border-radius:50%;background:rgba(213,239,172,.12)}
-.tool-visual::before{content:"";position:absolute;width:300px;aspect-ratio:1;top:8%;border-radius:50%;z-index:-1;filter:blur(50px);background:radial-gradient(closest-side,rgba(134,227,200,.28),transparent)}
-.phone{border:1px solid rgba(213,239,172,.22);background:#030d0a;box-shadow:0 40px 80px -30px rgba(0,0,0,.9),inset 0 0 0 2px #10241b;transition:transform .5s var(--ease-out),box-shadow .5s var(--ease-out)}
-.phone:hover{transform:translateY(-6px) rotate(-1deg);box-shadow:0 50px 90px -30px rgba(0,0,0,.95),0 0 0 1px rgba(213,239,172,.3),inset 0 0 0 2px #10241b}
 .capture-note,.archive-note{font-size:12px!important;color:#93aa9b!important}
+
+/* Marcos de dispositivo para TODAS las capturas: canto metálico, bisel fino, botones laterales,
+   cámara perforada y cristal. Cada contexto fija --dw (ancho del teléfono) y el resto se deriva de
+   él; la pantalla es 9:20 (1080×2400), así que el hueco existe antes de que llegue la imagen. */
+.phone,.tool-visual .phone,.gallery-shot,.hero-shot{
+  --bz:calc(var(--dw,230px)*.034);--rr:calc(var(--dw,230px)*.16);--ri:calc(var(--rr) - var(--bz));
+  --lift:0 0 0 rgba(0,0,0,0);
+  position:relative;display:block;width:var(--dw,230px);max-width:100%;padding:var(--bz);border:0;border-radius:var(--rr);overflow:visible;isolation:isolate;
+  background:linear-gradient(150deg,#2a3833 0%,#0b1210 14%,#030605 48%,#060b09 86%,#22302a 100%);
+  box-shadow:inset 0 0 0 1px rgba(222,240,230,.3),inset 0 0 0 2px #0b1310,inset 0 1px 0 2px rgba(255,255,255,.12),
+    0 0 0 1px rgba(0,0,0,.7),0 2px 6px rgba(0,0,0,.35),0 30px 50px -24px rgba(0,0,0,.85),0 70px 120px -50px rgba(0,0,0,.8),var(--lift);
+  transition:transform .6s var(--ease-out),box-shadow .6s var(--ease-out)}
+.phone>img,.tool-visual .phone>img,.gallery-shot>img,.hero-shot>img{display:block;width:100%;height:auto;aspect-ratio:9/20;object-fit:cover;object-position:50% 0;border-radius:var(--ri);background:#06110d;-webkit-user-drag:none;-webkit-user-select:none;user-select:none}
+/* Botones (encendido y volumen) en el canto derecho, como un Android actual. */
+.phone::before,.gallery-shot::before,.hero-shot::before{content:"";position:absolute;left:100%;top:20%;width:max(2px,calc(var(--dw,230px)*.012));height:27%;border-radius:0 3px 3px 0;pointer-events:none;
+  background:linear-gradient(90deg,#43524b,#18211d) 0 0/100% 22% no-repeat,linear-gradient(90deg,#43524b,#18211d) 0 100%/100% 56% no-repeat}
+/* Cristal: cámara perforada con reflejo, brillo diagonal y viñeta del borde de la pantalla. */
+.phone::after,.gallery-shot::after,.hero-shot::after{content:"";position:absolute;inset:var(--bz);z-index:1;border-radius:var(--ri);pointer-events:none;
+  background:
+    radial-gradient(circle at calc(50% + var(--dw,230px)*.007) calc(var(--dw,230px)*.046),rgba(160,200,235,.6) 0 calc(var(--dw,230px)*.004),transparent calc(var(--dw,230px)*.008)),
+    radial-gradient(circle at 50% calc(var(--dw,230px)*.052),#010202 calc(var(--dw,230px)*.019),rgba(46,66,58,.95) calc(var(--dw,230px)*.021),transparent calc(var(--dw,230px)*.026)),
+    linear-gradient(118deg,rgba(255,255,255,.13) 0%,rgba(255,255,255,.045) 20%,transparent 34%,transparent 72%,rgba(255,255,255,.035) 100%) 0 0/200% 200% no-repeat;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.05),inset 0 0 calc(var(--dw,230px)*.05) rgba(0,0,0,.42);
+  transition:background-position 1.1s var(--ease-out)}
+.phone .zoom-badge,.gallery-shot .zoom-badge{z-index:2;right:calc(var(--bz) + 10px);bottom:calc(var(--bz) + 10px)}
+.phone:hover,.gallery-shot:hover{transform:translateY(-8px);--lift:0 40px 80px -34px rgba(134,227,200,.3)}
+.phone:hover::after,.gallery-shot:hover::after{background-position:0 0,0 0,34% 34%}
+.phone:focus-visible,.gallery-shot:focus-visible{outline-offset:6px;border-radius:var(--rr)}
+.phone:active,.gallery-shot:active{transform:translateY(-4px) scale(.985);transition-duration:.15s}
+
+/* Herramientas: escenario con luz de marca, ondas como de sonido y sombra de apoyo. */
+.tool-visual{--dw:236px}
+.tool-visual::before{content:"";position:absolute;z-index:-1;left:50%;top:calc(var(--dw)*.25);width:calc(var(--dw)*1.85);aspect-ratio:1;translate:-50% 0;border-radius:50%;filter:blur(48px);pointer-events:none;
+  background:radial-gradient(closest-side,rgba(134,227,200,.36),rgba(213,239,172,.16) 48%,transparent 74%)}
+.tool-visual::after{content:"";position:absolute;z-index:-1;left:50%;top:calc(var(--dw)*2.2);width:calc(var(--dw)*.95);height:calc(var(--dw)*.16);translate:-50% 0;border-radius:50%;background:rgba(0,0,0,.6);filter:blur(16px);pointer-events:none}
+.tool-orbit{display:block;left:50%;top:calc(var(--dw)*.1);width:calc(var(--dw)*2.1);max-width:none;translate:-50% 0;border:0;pointer-events:none;
+  background:repeating-radial-gradient(circle,transparent 0 calc(var(--dw)*.15 - 1px),rgba(213,239,172,.085) calc(var(--dw)*.15 - 1px) calc(var(--dw)*.15));
+  -webkit-mask-image:radial-gradient(closest-side,transparent 40%,#000 56%,transparent 100%);mask-image:radial-gradient(closest-side,transparent 40%,#000 56%,transparent 100%)}
+/* Cambio de pestaña: la captura entra desde el lado hacia el que avanzas (premium.js fija --sd). */
+.tool-panel:not([hidden]){animation:mk-fade .5s var(--ease-out) both}
+@keyframes mk-fade{from{opacity:0}}
+.tool-panel:not([hidden]) .tool-phone{animation:mk-phone-in .9s var(--ease-out) both}
+@keyframes mk-phone-in{from{opacity:0;translate:calc(var(--sd,1)*60px) 16px;rotate:calc(var(--sd,1)*4deg);scale:.94}}
+.tool-panel:not([hidden]) .tool-copy>*{animation:mk-rise .7s var(--ease-out) both}
+.tool-panel:not([hidden]) .tool-copy>:nth-child(2){animation-delay:.06s}
+.tool-panel:not([hidden]) .tool-copy>:nth-child(3){animation-delay:.12s}
+.tool-panel:not([hidden]) .tool-copy>:nth-child(4){animation-delay:.18s}
+@keyframes mk-rise{from{opacity:0;translate:0 14px}}
+
+/* Hero: dos capturas reales en abanico detrás de la demo, con parallax suave (premium.js). */
+.workspace-preview{isolation:isolate}
+.workspace-preview>.demo-presets,.workspace-preview>.demo-caption{position:relative;z-index:1}
+.workspace-preview>.workspace-device{z-index:1}
+.hero-shots{display:none}
+.hero-shot>img{filter:brightness(.86) saturate(.92)}
+/* Solo donde hay aire junto a la demo; en pantallas más estrechas manda la claridad. La demo sigue
+   alineada con el botón de la cabecera y las capturas se abren como un mazo hacia el lado del texto
+   (--side lo invierte en RTL), sin pasar del hueco entre columnas ni del borde del contenedor. */
+@media(min-width:1280px){
+  .hero-shots{display:block;position:absolute;inset:0;z-index:0;pointer-events:none;translate:calc(var(--hx,0)*-18px) calc(var(--hy,0)*-12px);transition:translate 1s var(--ease-out)}
+  .hero-shot{--dw:184px;--side:-1;position:absolute;left:50%;top:var(--t);margin-left:calc(var(--dw)/-2);
+    translate:calc(var(--side)*var(--x)) calc(var(--sy,0)*var(--k)*1px);rotate:calc(var(--side)*var(--r))}
+  [dir=rtl] .hero-shot{--side:1}
+  .hero-shot-a{z-index:1;--x:190px;--t:30px;--r:4deg;--k:.03}
+  .hero-shot-b{--x:228px;--t:80px;--r:10deg;--k:.06}
+}
+@media(min-width:1440px){.hero-shot{--dw:200px}.hero-shot-a{--x:208px}.hero-shot-b{--x:256px;--t:86px}}
 
 /* Galería. */
 .app-section{background:transparent;border-top:0;position:relative}
 .gallery-heading h2{font-weight:650;letter-spacing:-.03em}
-.gallery-track{gap:22px;padding-block:14px 26px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 3%,#000 97%,transparent);mask-image:linear-gradient(90deg,transparent,#000 3%,#000 97%,transparent)}
-.gallery-shot{border-radius:24px;padding:6px;border-color:rgba(213,239,172,.18);background:linear-gradient(160deg,#0f2a21,#030d0a);transition:transform .5s var(--ease-out),box-shadow .5s var(--ease-out),border-color .3s}
-.gallery-shot img{border-radius:18px;transition:transform .8s var(--ease-out)}
-.gallery-shot:hover{transform:translateY(-8px);border-color:rgba(213,239,172,.45);box-shadow:0 40px 70px -34px rgba(0,0,0,.95),0 0 40px -12px rgba(134,227,200,.35)}
-.gallery-item figcaption{font-size:15px;font-weight:600}
-.gallery-index{font-size:12px;font-weight:600;color:#8fa898}
+/* Carrusel. Sin JS se queda alineado al contenedor y con su barra de scroll. Con premium.js
+   (.mk-enhanced) va a sangre: cada tarjeta se centra al soltar y la central se destaca. */
+.gallery-track{--dw:248px;gap:26px;padding:16px 10px 26px;scroll-padding-inline:10px}
+.gallery-track.mk-enhanced{margin-inline:calc(50% - 50vw);padding:34px calc(50vw - var(--dw)/2) 70px;margin-block:-20px -46px;scroll-padding-inline:0;scrollbar-width:none;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent)}
+.gallery-track.mk-enhanced::-webkit-scrollbar{display:none}
+.gallery-track:focus-visible{outline-offset:-4px;border-radius:28px}
+/* La máscara de los bordes borraría el anillo de la pista: con premium.js el foco de la pista se
+   marca en la captura central, que es la que mueven las flechas del teclado. */
+.gallery-track.mk-enhanced:focus-visible{outline:none}
+.gallery-track.mk-enhanced:focus-visible .is-center .gallery-shot{outline:2px solid var(--teal);outline-offset:10px;border-radius:var(--rr)}
+.gallery-item{position:relative;flex:0 0 var(--dw);scroll-snap-align:start}
+.mk-enhanced .gallery-item{scroll-snap-align:center}
+.gallery-item::before{content:"";position:absolute;z-index:-1;left:50%;top:18%;width:150%;aspect-ratio:1;translate:-50% 0;border-radius:50%;pointer-events:none;opacity:0;
+  background:radial-gradient(closest-side,rgba(134,227,200,.22),rgba(213,239,172,.07) 55%,transparent);transition:opacity .6s var(--ease-out)}
+.gallery-item.is-center::before{opacity:1}
+.gallery-item figcaption{font-size:15px;font-weight:600;transition:color .4s}
+.gallery-item.is-center figcaption{color:var(--paper)}
+.gallery-index{font-size:12px;font-weight:600;color:#a3bcac;font-variant-numeric:tabular-nums;transition:color .4s}
+.gallery-item.is-center .gallery-index{color:var(--mint)}
+.gallery-track.is-dragging{scroll-snap-type:none;cursor:grabbing;-webkit-user-select:none;user-select:none}
+.gallery-track.is-dragging .gallery-shot{pointer-events:none}
+@media (hover:hover) and (pointer:fine){.gallery-track.mk-enhanced{cursor:grab}}
+/* Destacado de la central: --mk-f va de 0 (tarjeta fuera de la vista) a 1 (centrada). Solo la
+   captura escala (desde su base, para que todos los pies queden en línea) y se apaga; el pie no
+   escala, así que conserva sus 12-15 px, y se estrecha para seguir el ancho del teléfono. */
+@property --mk-f{syntax:"<number>";inherits:true;initial-value:1}
+.gallery-item{--mk-lo:.8}
+.gallery-shot{transform-origin:50% 100%;scale:calc(var(--mk-lo) + (1 - var(--mk-lo))*var(--mk-f,1));opacity:calc(.42 + .58*var(--mk-f,1))}
+.gallery-item figcaption{padding-inline:calc(6px + (1 - var(--mk-lo))*(1 - var(--mk-f,1))*var(--dw)/2);opacity:calc(.72 + .28*var(--mk-f,1))}
+@supports (animation-timeline:view()){
+  /* En RTL Chromium desplaza la línea de tiempo una tarjeta: ahí (y sin esta función) lo calcula premium.js. */
+  html:not([dir=rtl]) .mk-enhanced .gallery-item{animation:mk-focus auto linear both;animation-timeline:view(inline);animation-range:cover}
+  @keyframes mk-focus{0%,100%{--mk-f:0}32%,68%{--mk-f:.5}50%{--mk-f:1}}
+}
+/* Indicadores de posición (decorativos: la galería ya se maneja con flechas, teclado y gesto). */
+.mk-gallery-ui{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;gap:18px;margin-block:22px 0}
+.app-section .archive-note,.app-section .gallery-hint{position:relative;z-index:1}
+.mk-dots{display:flex;align-items:center}
+.mk-dots i{display:block;width:8px;height:8px;padding:6px;box-sizing:content-box;border-radius:999px;background:rgba(213,239,172,.22) content-box;cursor:pointer;transition:width .45s var(--ease-out),background-color .45s}
+.mk-dots i:hover{background-color:rgba(213,239,172,.45)}
+.mk-dots i.on{width:30px;background:linear-gradient(90deg,var(--mint),var(--teal)) content-box}
+.mk-count{min-width:62px;font-size:12.5px;font-weight:600;letter-spacing:.08em;color:#9fb5a7;font-variant-numeric:tabular-nums;direction:ltr}
+.mk-count b{color:var(--paper);font-weight:650}
 .gallery-hint{font-size:12px}
 .zoom-badge{backdrop-filter:blur(8px);background:rgba(6,19,15,.7)}
 
@@ -218,6 +331,9 @@ a:focus-visible,button:focus-visible,select:focus-visible,[tabindex]:focus-visib
 /* Diálogos (galería y formulario) con cristal y entrada suave. */
 .lightbox,.access-dialog{border-color:var(--line-strong);background:rgba(10,29,23,.92);backdrop-filter:blur(20px);border-radius:26px;box-shadow:0 60px 140px -40px rgba(0,0,0,.95)}
 .lightbox[open],.access-dialog[open]{animation:mk-dialog .45s var(--ease-out)}
+.lightbox-body img{border-radius:clamp(14px,3.6vh,34px);box-shadow:0 0 0 1px rgba(213,239,172,.12),0 30px 60px -30px rgba(0,0,0,.9)}
+/* Las capturas nuevas miden 1080×2400: en escritorio el zoom ocupa todo el ancho del visor. */
+@media(min-width:700px){.lightbox.is-zoomed .lightbox-body img{width:1080px}}
 .lightbox::backdrop,.access-dialog::backdrop{background:rgba(2,9,6,.72);backdrop-filter:blur(10px)}
 @keyframes mk-dialog{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:none}}
 .access-panel{border-radius:26px;background:transparent}
@@ -261,14 +377,22 @@ a:focus-visible,button:focus-visible,select:focus-visible,[tabindex]:focus-visib
   .demo-block:not([hidden]){animation:mk-block .55s var(--ease-out) both}
   @keyframes mk-block{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
   .early-card::before{animation:mk-mesh 16s ease-in-out infinite alternate}
+  /* Capturas del hero: se abren en abanico desde detrás de la demo. */
+  .hero-shot{animation:mk-fan 1.3s .3s var(--ease-out) backwards}
+  .hero-shot-b{animation-delay:.42s}
+  @keyframes mk-fan{from{opacity:0;translate:0 60px;rotate:0deg;scale:.9}}
+  /* Escenario de herramientas: la luz respira y las ondas laten despacio. */
+  .tool-visual::before{animation:mk-breathe 8s ease-in-out infinite}
+  .tool-orbit{animation:mk-ripple 7s ease-in-out infinite}
+  @keyframes mk-ripple{0%,100%{scale:.96;opacity:.7}50%{scale:1.04;opacity:1}}
   @keyframes mk-mesh{0%{transform:translate(0,0) rotate(0)}100%{transform:translate(6%,-4%) rotate(12deg)}}
 }
 @media (prefers-reduced-motion:reduce){.mk-reveal{opacity:1;transform:none;filter:none}.workspace-device{transform:none!important}}
 
 /* Ajustes por tamaño (mantiene la legibilidad mínima de 11-12 px). */
 @media(min-width:960px){.hero{min-height:calc(100svh - 90px);max-height:960px}}
-@media(max-width:1199px){.desktop-nav a{padding:0 11px;font-size:13px}.early-card{padding:52px 46px 26px}}
-@media(max-width:959px){.update-grid{gap:14px}.workspace-section{padding-block:80px 70px}.tool-tabs button{font-size:13px}.early-card{padding:42px 34px 24px}}
+@media(max-width:1199px){.desktop-nav a{padding:0 11px;font-size:13px}.early-card{padding:52px 46px 26px}.tool-visual{--dw:222px}}
+@media(max-width:959px){.update-grid{gap:14px}.workspace-section{padding-block:80px 70px}.tool-tabs button{font-size:13px}.early-card{padding:42px 34px 24px}.tool-visual{--dw:206px}.gallery-track{--dw:228px;gap:22px}}
 @media(max-width:699px){
   .hero .eyebrow{font-size:10.5px;letter-spacing:.14em}
   .hero-intro{font-size:16px}
@@ -295,8 +419,12 @@ a:focus-visible,button:focus-visible,select:focus-visible,[tabindex]:focus-visib
   .site-footer::before{font-size:28vw}
   .footer-bottom{font-size:11.5px!important}
   .demo-caption{font-size:11px}
+  .tool-visual{--dw:min(216px,62vw)}
+  .gallery-track{--dw:min(62vw,248px);gap:18px}.gallery-item{--mk-lo:.88}
+  .gallery-track.mk-enhanced{padding-block:28px 60px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent);mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent)}
+  .mk-gallery-ui{margin-block-start:16px}
 }
 /* Escrituras sin cursiva real: sin inclinación sintética. */
 :is([lang^=zh],[lang=ja],[lang=ko],[lang=ar],[lang=hi]) :is(.hero h1 em,.section-heading h2>span,.step-index){font-family:var(--font);font-style:normal;font-weight:600}
 @media(max-width:539px){.update-grid{grid-template-columns:1fr}.update-grid article{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:center}.update-grid article h3{margin:0}.update-grid article p{grid-column:1/-1;margin-block-start:10px}}
-@media print{body::before,body::after,.mk-progress,.site-footer::before{display:none}.mk-reveal{opacity:1;transform:none;filter:none}}
+@media print{body::before,body::after,.mk-progress,.site-footer::before,.hero-shots,.mk-gallery-ui{display:none}.gallery-track,.gallery-track.mk-enhanced{margin-inline:0;padding-inline:0;-webkit-mask-image:none;mask-image:none}.gallery-item{animation:none!important;--mk-f:1}.mk-reveal{opacity:1;transform:none;filter:none}}
